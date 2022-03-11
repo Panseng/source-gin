@@ -1,0 +1,131 @@
+basePath: /api/v1
+definitions:
+  response.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+  user.LoginRequest:
+    properties:
+      captcha:
+        description: 验证码
+        type: string
+      captchaId:
+        description: 验证码ID
+        type: string
+      password:
+        description: 密码
+        type: string
+      username:
+        description: 用户名
+        type: string
+    type: object
+  user.LoginResponse:
+    properties:
+      expiresAt:
+        type: integer
+      token:
+        type: string
+    type: object
+  user.RegisterRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  user.UserInfoResponse:
+    properties:
+      gender:
+        type: integer
+      headerImg:
+        type: string
+      id:
+        type: integer
+      mobile:
+        type: string
+      name:
+        type: string
+    type: object
+host: 127.0.0.1:80
+info:
+  contact:
+    email: panseng.dr@qq.com
+    name: Jimmy
+    url: panseng.dr@qq.com
+  description: 这是一个gin实践小项目.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://github.com/Panseng
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: 用户登录，向服务器提供用户登录数据
+      parameters:
+      - description: 用户名, 密码, 验证码, 验证码ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/user.LoginRequest'
+      responses:
+        "200":
+          description: 错误提示信息
+          schema:
+            type: string
+      summary: 用户登录
+      tags:
+      - user
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: 用户注册，向服务器提供用户数据
+      parameters:
+      - description: 用户名, 密码
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/user.RegisterRequest'
+      responses:
+        "200":
+          description: 错误提示信息
+          schema:
+            type: string
+      summary: 用户注册
+      tags:
+      - user
+  /user/userinfo/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取用户信息
+      parameters:
+      - description: jwt
+        in: header
+        name: x-token
+        required: true
+        type: string
+      - description: 用户id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: 错误提示信息
+          schema:
+            type: string
+      summary: 获取用户信息
+      tags:
+      - user
+swagger: "2.0"

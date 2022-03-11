@@ -27,6 +27,18 @@ sql数据：`gorm.io/gorm`（`jinzhu/gorm`的更新版本）
 
 用户认证（中间件）：`golang-jwt/jwt/v4`
 
+API文档 & API调测：`swaggo/swag`
+
 ## Todo
-- [ ] swagger 生成api文档
 - [ ] redis 缓存 jwt
+
+## swagger 尾部参数
+如以下路径的id，需要作为api值传递
+```go
+Router.GET("userinfo/:id", userApi.GetUserInfo)
+```
+则需要在handler中，参数项类型设置为path，同时在路径加上变量名称`{id}`
+```go
+// @Param id path uint true "用户id"
+// @Router /user/userinfo/{id} [get]
+```
