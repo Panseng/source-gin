@@ -2,13 +2,13 @@ package utils
 
 import (
 	"errors"
+	"practise-code/model/types"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 
 	"practise-code/global"
 	jwtModel "practise-code/model/http/jwt"
-	"practise-code/model/sql/user"
 )
 
 var (
@@ -18,7 +18,7 @@ var (
 	TokenInvalid     = errors.New("couldn't handle this token")
 )
 
-func GetToken(user user.User) (string, error) {
+func GetToken(user types.User) (string, error) {
 	claim := jwtModel.BaseClaims{
 		ID: user.DefaultField.ID,
 		Username: user.Username,

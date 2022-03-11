@@ -2,9 +2,11 @@ package user
 
 import (
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+	"practise-code/model/types"
+	"strconv"
 
 	"practise-code/global"
-	"practise-code/model"
 	httpUser "practise-code/model/http/user"
 	sqlUser "practise-code/model/sql/user"
 	"practise-code/utils"
@@ -14,6 +16,32 @@ import (
 
 type UserApi struct{}
 
+func (u *UserApi) Register(c *gin.Context){
+	var r httpUser.RegisterRequest
+	_ = c.ShouldBindJSON(&r)
+	if err := utilsValid.Verify(r, utilsValid.RegisterVerify); err != nil{
+		utilsResponse.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	// 这里在思考，将sql层单独放到model是否合适
+	if sqlUser.CheckUserName(r.Username) != gorm.ErrRecordNotFound{
+		utilsResponse.FailWithMessage("用户名不可用", c)
+		return
+	}
+	user := types.User{
+		Username: r.Username,
+		Password: r.Password,
+	}
+	if err := sqlUser.Register(user); err == nil{
+		utilsResponse.OkWithMessage("成功注册", c)
+		return
+	} else {
+		utilsResponse.FailWithMessage(err.Error(), c)
+		return
+	}
+}
+
 func (u *UserApi) Login(c *gin.Context) {
 	var l httpUser.LoginRequest
 	_ = c.ShouldBindJSON(&l)                                             // 获取值
@@ -21,18 +49,19 @@ func (u *UserApi) Login(c *gin.Context) {
 		utilsResponse.FailWithMessage(err.Error(), c)
 		return
 	}
-	// Todo
+	var user types.User
+	var err error
 	// 从数据库校验值对错
+	if user, err = sqlUser.Login(types.User{Username: l.Username, Password: l.Password}); err != nil{
+		if err == gorm.ErrRecordNotFound{
+			utilsResponse.FailWithMessage("用户密码错误或不存在", c)
+			return
+		}
+		utilsResponse.FailWithMessage("数据库未初始化", c)
+		return
+	}
 
 	expiresTime := global.CONFIG.JWT.ExpiresTime
-	// Todo
-	// 此处暂时用手写user代替
-	user := sqlUser.User{
-		DefaultField: model.DefaultField{
-			ID: 1,
-		},
-		Username: "test",
-	}
 	accessToken, err := utils.GetToken(user)
 	if err != nil {
 		utilsResponse.FailWithMessage("获取token失败", c)
@@ -45,11 +74,21 @@ func (u *UserApi) Login(c *gin.Context) {
 }
 
 func (u *UserApi) GetUserInfo(c *gin.Context) {
-	// 假装有mysql
+	uid, _ := strconv.ParseUint(c.Param("uid"), 10, 64)
+
+	user, err := sqlUser.GetUserInfo(uint(uid))
+	if err != nil{
+		if err == gorm.ErrRecordNotFound{
+			utilsResponse.FailWithMessage("用户不存在", c)
+			return
+		}
+		utilsResponse.FailWithMessage(err.Error(), c)
+		return
+	}
 	utilsResponse.OkWithDetailed(gin.H{"userInfo": httpUser.UserInfoResponse{
-		ID: 1,
-		Name: "test",
-		Mobile: "12546597985",
-		HeaderImg: "https://qmplusimg.henrongyi.top/gva_header.jpg",
+		ID: user.ID,
+		Name: user.Username,
+		Mobile: user.Phone,
+		HeaderImg: user.HeaderImg,
 	}}, "获取成功", c)
 }

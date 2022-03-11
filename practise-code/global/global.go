@@ -1,19 +1,21 @@
 package global
 
-import "practise-code/config"
+import (
+	"fmt"
+	"practise-code/config"
+	"practise-code/model/sql"
+)
 
-var CONFIG config.Config
+var(
+	CONFIG config.Config
+	SQLHARD sql.SqlHard
+)
 
 func InitGlobal()  {
-	//CONFIG = config.Config{
-	//	Port: "8080",
-	//	JWT: config.JWT{
-	//		SigningKey: "DSdf1s15afSDA5sd1fdf5sdf1f",
-	//		ExpiresTime: 60*10, // 10分钟
-	//		Issuer: "JP",
-	//	},
-	//}
-	CONFIG.ReadConf()
+	CONFIG.ReadConf() // 读取配置项
+	fmt.Printf("配置：%+v\n", CONFIG)
+	SQLHARD.InitDB(CONFIG.Mysql)
+	SQLHARD.AutoMigrate() // 自动迁移表格
 }
 
 

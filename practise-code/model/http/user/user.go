@@ -2,9 +2,8 @@ package user
 
 // User register structure
 type RegisterRequest struct {
-	Username string `json:"userName"`
-	Password string `json:"passWord"`
-	NickName string `json:"nickName" gorm:"default:'QMPlusUser'"`
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 // User login structure
