@@ -1,7 +1,6 @@
 package user
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"practise-code/model/types"
@@ -29,12 +28,14 @@ func (u *UserApi) Register(c *gin.Context){
 	var r httpUser.RegisterRequest
 	_ = c.ShouldBindJSON(&r)
 	if err := utilsValid.Verify(r, utilsValid.RegisterVerify); err != nil{
+		global.SLOG.Infof("用户注册，用户数据不完整：user-%+v, err-%+v", r, err)
 		utilsResponse.FailWithMessage(err.Error(), c)
 		return
 	}
 
 	// 这里在思考，将sql层单独放到model是否合适
 	if sqlUser.CheckUserName(r.Username) != gorm.ErrRecordNotFound{
+		global.SLOG.Infof("用户注册，用户名不可用：user-%+v", r)
 		utilsResponse.FailWithMessage("用户名不可用", c)
 		return
 	}
@@ -46,11 +47,11 @@ func (u *UserApi) Register(c *gin.Context){
 		utilsResponse.OkWithMessage("成功注册", c)
 		return
 	} else {
+		global.SLOG.Warnf("用户注册，用户注册失败：user-%+v, err-%+v", r, err)
 		utilsResponse.FailWithMessage(err.Error(), c)
 		return
 	}
 }
-
 
 // @Summary 用户登录
 // @Description 用户登录，向服务器提供用户登录数据
@@ -64,6 +65,7 @@ func (u *UserApi) Login(c *gin.Context) {
 	var l httpUser.LoginRequest
 	_ = c.ShouldBindJSON(&l)                                             // 获取值
 	if err := utilsValid.Verify(l, utilsValid.LoginVerify); err != nil { // 校验取值的规范性
+		global.SLOG.Infof("登录，用户数据不完整：user-%+v, err-%+v", l, err)
 		utilsResponse.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -72,9 +74,11 @@ func (u *UserApi) Login(c *gin.Context) {
 	// 从数据库校验值对错
 	if user, err = sqlUser.Login(types.User{Username: l.Username, Password: l.Password}); err != nil{
 		if err == gorm.ErrRecordNotFound{
+			global.SLOG.Infof("登录，用户密码错误或不存在：user-%+v, err-%+v", l, err)
 			utilsResponse.FailWithMessage("用户密码错误或不存在", c)
 			return
 		}
+		global.SLOG.Warnf("登录，其他错误：user-%+v, err-%+v", l, err)
 		utilsResponse.FailWithMessage("数据库未初始化", c)
 		return
 	}
@@ -82,6 +86,7 @@ func (u *UserApi) Login(c *gin.Context) {
 	expiresTime := global.CONFIG.JWT.ExpiresTime
 	accessToken, err := utils.GetToken(user)
 	if err != nil {
+		global.SLOG.Error("登录，其他错误：user-%+v, err-%+v", user, err)
 		utilsResponse.FailWithMessage("获取token失败", c)
 		return
 	}
@@ -101,16 +106,18 @@ func (u *UserApi) Login(c *gin.Context) {
 // @Param id path uint true "用户id"
 // @Router /user/userinfo/{id} [get]
 func (u *UserApi) GetUserInfo(c *gin.Context) {
-	uid, _ := strconv.ParseUint(c.Param("uid"), 10, 64)
-	fmt.Println("=============================================================")
-	fmt.Println(uid)
-	fmt.Println("=============================================================")
+	uid, err := strconv.ParseUint(c.Param("uid"), 10, 64)
+	if err != nil{
+		global.SLOG.Infof("获取用户信息，从路径获取用户id出错：%+v", err)
+	}
 	user, err := sqlUser.GetUserInfo(uint(uid))
 	if err != nil{
 		if err == gorm.ErrRecordNotFound{
+			global.SLOG.Infof("获取用户信息，用户不存在：uid-%v, err-%+v", uid, err)
 			utilsResponse.FailWithMessage("用户不存在", c)
 			return
 		}
+		global.SLOG.Warnf("获取用户信息，其他错误：uid-%v, err-%+v", uid, err)
 		utilsResponse.FailWithMessage(err.Error(), c)
 		return
 	}

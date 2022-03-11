@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-
 	_ "practise-code/docs" // swagger
 	"practise-code/global"
 	"practise-code/router"
@@ -23,8 +22,11 @@ import (
 func main()  {
 	global.InitGlobal()
 	s := router.InitRouter() // 初始化路由
+	global.SLOG.Infow("practise services starting at: http://" + global.CONFIG.Path + ":" + global.CONFIG.Port)
 	err := s.ListenAndServe()
+	fmt.Println("=========================================================")
+	fmt.Println("这里打印不到？")
 	if err != nil{
-		fmt.Println(err)
+		global.SLOG.Panic(err)
 	}
 }

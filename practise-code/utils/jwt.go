@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	TokenExpired     = errors.New("Token is expired")
+	TokenExpired     = errors.New("token is expired")
 	TokenNotValidYet = errors.New("token not active yet")
 	TokenMalformed   = errors.New("that's not even a token")
 	TokenInvalid     = errors.New("couldn't handle this token")
@@ -44,19 +44,19 @@ func ParseToken(tokens string) (*jwtModel.BaseClaims, error) {
 	if err != nil {
 		if ve, ok := err.(*jwt.ValidationError); ok {
 			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
-				return nil, errors.New("that's not even a token")
+				return nil, TokenMalformed
 			} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
-				return nil, errors.New("token is expired")
+				return nil, TokenExpired
 			} else if ve.Errors&jwt.ValidationErrorNotValidYet != 0 {
-				return nil, errors.New("token not active yet")
+				return nil, TokenNotValidYet
 			} else {
-				return nil, errors.New("couldn't handle this token")
+				return nil, TokenInvalid
 			}
 		}
-		return nil, errors.New("couldn't handle this token")
+		return nil, TokenInvalid
 	}
 	if claims, ok := token.Claims.(*jwtModel.BaseClaims); ok && token.Valid {
 		return claims, nil
 	}
-	return nil, errors.New("couldn't handle this token")
+	return nil, TokenInvalid
 }

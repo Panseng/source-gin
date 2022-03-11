@@ -6,6 +6,7 @@ gin框架的实践项目
 ├── api
 │   └── v1
 ├── config  // 配置包
+├── docs  // swagger api生成文件
 ├── global  // 全局对象
 ├── middleware // 中间件
 ├── model  // 模型层
@@ -18,7 +19,7 @@ gin框架的实践项目
     └── validator // 值校验
 ```
 
-## 功能简介
+## 技术栈
 主体框架：`gin-gonic/gin`
 
 配置项读取：`gopkg.in/ini.v1`
@@ -28,6 +29,8 @@ sql数据：`gorm.io/gorm`（`jinzhu/gorm`的更新版本）
 用户认证（中间件）：`golang-jwt/jwt/v4`
 
 API文档 & API调测：`swaggo/swag`
+
+日志：`go.uber.org/zap`
 
 ## Todo
 - [ ] redis 缓存 jwt
