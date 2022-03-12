@@ -1,3 +1,21 @@
-{"level":"INFO","ts":"2022-03-11T23:52:17.503+0800","caller":"practise-code/main.go:25","msg":"practise services starting at: http://localhost:80"}
-{"level":"INFO","ts":"2022-03-11T23:52:27.137+0800","caller":"middleware/jwt.go:23","msg":"JWT权限校验，授权已过期"}
-{"level":"INFO","ts":"2022-03-11T23:52:52.010+0800","caller":"middleware/jwt.go:28","msg":"JWT权限校验，其他错误，token: 4da13a1fd, err: that's not even a token"}
+{"level":"INFO","ts":"2022-03-12T17:11:39.283+0800","caller":"redis/redis.go:26","msg":"redis connect success, ping is PONG"}
+{"level":"INFO","ts":"2022-03-12T17:11:39.295+0800","caller":"practise-code/main.go:25","msg":"practise services starting at: http://localhost:80"}
+{"level":"INFO","ts":"2022-03-12T17:12:27.922+0800","caller":"redis/redis.go:26","msg":"redis connect success, ping is PONG"}
+{"level":"INFO","ts":"2022-03-12T17:12:27.932+0800","caller":"practise-code/main.go:25","msg":"practise services starting at: http://localhost:80"}
+{"level":"INFO","ts":"2022-03-12T17:12:41.275+0800","caller":"redis/redis.go:26","msg":"redis connect success, ping is PONG"}
+{"level":"INFO","ts":"2022-03-12T17:12:41.287+0800","caller":"practise-code/main.go:25","msg":"practise services starting at: http://localhost:80"}
+{"level":"WARN","ts":"2022-03-12T17:13:08.527+0800","caller":"middleware/jwt.go:28","msg":"JWT权限校验，其他错误，token: 4da13a1fd, err: that's not even a token"}
+{"level":"INFO","ts":"2022-03-12T17:15:29.197+0800","caller":"redis/redis.go:26","msg":"redis connect success, ping is PONG"}
+{"level":"INFO","ts":"2022-03-12T17:15:29.209+0800","caller":"practise-code/main.go:25","msg":"practise services starting at: http://localhost:80"}
+{"level":"INFO","ts":"2022-03-12T17:20:23.837+0800","caller":"redis/redis.go:32","msg":"redis connect success, ping is PONG"}
+{"level":"INFO","ts":"2022-03-12T17:20:23.851+0800","caller":"practise-code/main.go:25","msg":"practise services starting at: http://localhost:80"}
+{"level":"INFO","ts":"2022-03-12T17:23:20.054+0800","caller":"redis/redis.go:56","msg":"redis connect success, ping is PONG"}
+{"level":"INFO","ts":"2022-03-12T17:24:22.958+0800","caller":"redis/redis.go:33","msg":"redis connect success, ping is PONG"}
+{"level":"INFO","ts":"2022-03-12T17:24:32.811+0800","caller":"redis/redis.go:33","msg":"redis connect success, ping is PONG"}
+{"level":"INFO","ts":"2022-03-12T17:24:59.939+0800","caller":"redis/redis.go:33","msg":"redis connect success, ping is PONG"}
+{"level":"INFO","ts":"2022-03-12T17:27:12.685+0800","caller":"redis/redis.go:29","msg":"redis connect success, ping is PONG"}
+{"level":"INFO","ts":"2022-03-12T17:28:49.555+0800","caller":"redis/redis.go:30","msg":"redis connect success, ping is PONG"}
+{"level":"INFO","ts":"2022-03-12T17:33:51.731+0800","caller":"redis/redis.go:28","msg":"redis connect success, ping is PONG"}
+{"level":"INFO","ts":"2022-03-12T17:34:43.340+0800","caller":"redis/redis.go:28","msg":"redis connect success, ping is PONG"}
+{"level":"INFO","ts":"2022-03-12T17:34:43.352+0800","caller":"practise-code/main.go:25","msg":"practise services starting at: http://localhost:80"}
+{"level":"INFO","ts":"2022-03-12T17:35:09.002+0800","caller":"middleware/jwt.go:42","msg":"JWT权限校验，当前授权已作废"}

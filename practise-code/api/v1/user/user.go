@@ -5,6 +5,7 @@ import (
 	"gorm.io/gorm"
 	"practise-code/model/types"
 	"strconv"
+	"time"
 
 	"practise-code/global"
 	httpUser "practise-code/model/http/user"
@@ -89,6 +90,14 @@ func (u *UserApi) Login(c *gin.Context) {
 		global.SLOG.Error("登录，其他错误：user-%+v, err-%+v", user, err)
 		utilsResponse.FailWithMessage("获取token失败", c)
 		return
+	}
+	// 不允许用户多点登录的情况下，缓存最新的jwt
+	// 配合websocket，可以即时将其他点用户登出
+	if !global.CONFIG.UseMultipoint{
+		err = global.REDIS.SetRedisJWT(accessToken, user.Username, time.Duration(expiresTime)*time.Second)
+		if err != nil{
+			global.SLOG.Errorf("redis cache jwt err: %+v", err)
+		}
 	}
 	utilsResponse.OkWithDetailed(httpUser.LoginResponse{
 		Token:     accessToken,

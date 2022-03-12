@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	_ "practise-code/docs" // swagger
 	"practise-code/global"
 	"practise-code/router"
@@ -18,7 +19,6 @@ import (
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 // @host 127.0.0.1:80
 // @BasePath /api/v1
-
 func main()  {
 	global.InitGlobal()
 	s := router.InitRouter() // 初始化路由

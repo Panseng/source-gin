@@ -1,6 +1,13 @@
 # About
 这是一个`gin`的实践+源码讲解项目
 
+## 目录
+```go
+├── notes // 笔记readme
+├── practise-code // 代码实践 
+├── source-code  // gin源码
+```
+
 ## 使用 practise-code
 ```bash
 # 获取项目代码

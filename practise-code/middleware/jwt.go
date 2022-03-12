@@ -30,6 +30,20 @@ func JWTAuth() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
+		cacheJWT := ""
+		// 不支持多点登录，则获取缓存jwt
+		if !global.CONFIG.UseMultipoint{
+			cacheJWT, err = global.REDIS.GetRedisJWT(claims.Username)
+			if err != nil{
+				global.SLOG.Errorf("redis get jwt err: %+v", err)
+			}
+		}
+		if cacheJWT != "" && cacheJWT != token{
+			global.SLOG.Infow("JWT权限校验，当前授权已作废")
+			response.FailWithDetailed(gin.H{"reload": true}, "用户已在其他窗口登录，当前授权已作废", c)
+			c.Abort()
+			return
+		}
 		c.Set("claims", claims)
 		c.Next()
 	}

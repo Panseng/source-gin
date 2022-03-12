@@ -9,8 +9,10 @@ type Config struct {
 	Name string `ini:"name"`
 	Port string `ini:"port"`
 	DBType bool `ini:"db_type"` // 数据库类型 默认mysql，目前只支持mysql
+	UseMultipoint bool `ini:"user_multipoint"` // 是否支持用户多点登录？ 默认支持 true
 	JWT // jwt配置项
 	Mysql // mysql配置项
+	Redis // redis配置
 	MD5 // md5 加密
 	ZAP // uber log配置
 }
@@ -31,6 +33,12 @@ type Mysql struct {
 	Password     string `ini:"password"`                 // 数据库密码
 	MaxIdleConns int    `ini:"max_idle_conns"` // 空闲中的最大连接数
 	MaxOpenConns int    `ini:"max_open_conns"` // 打开到数据库的最大连接数
+}
+
+type Redis struct {
+	Addr string `ini:"addr"` // 链接 host:port
+	DB int `ini:"db"` // 数据库
+	Password string `ini:"password"` // 密码 默认为空
 }
 
 type MD5 struct {
@@ -56,8 +64,10 @@ func (c *Config) ReadConf() {
 	}
 	// 设置默认值
 	// 这样设置也可以：c.JWT.ExpiresTime = 300
+	c.UseMultipoint = true
+	// jwt 配置
 	c.JWT = JWT{
-		ExpiresTime: 500,
+		ExpiresTime: 3600,
 	}
 	// mysql 配置项
 	c.Mysql = Mysql{
@@ -65,9 +75,17 @@ func (c *Config) ReadConf() {
 		Port: "3306",
 		Config: "?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai",
 	}
+	// redis 配置
+	c.Redis = Redis{
+		Addr: "localhost:6379",
+		Password: "",	// no password set
+		DB: 0,	// use default DB
+	}
+
+	// md5 配置
 	c.MD5 = MD5{Salt: "1as2*DfS4^&5adSAda@DF%5"}
 
-	// 配置zap
+	// zap 配置
 	c.ZAP = ZAP{
 		Dir: "./logs/",
 		Name: "practise.log",
