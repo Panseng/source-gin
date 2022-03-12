@@ -58,7 +58,7 @@ type methodTrees []methodTree
 
 func (trees methodTrees) get(method string) *node {
 	for _, tree := range trees {
-		if tree.method == method {
+		if tree.method == method { // 根据不同的方法，填入不同路由树
 			return tree.root
 		}
 	}
@@ -148,6 +148,7 @@ func (n *node) incrementChildPrio(pos int) int {
 
 // addRoute adds a node with the given handle to the path.
 // Not concurrency-safe!
+// 路由树的填充
 func (n *node) addRoute(path string, handlers HandlersChain) {
 	fullPath := path
 	n.priority++

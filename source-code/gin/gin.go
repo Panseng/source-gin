@@ -205,9 +205,13 @@ func New() *Engine {
 }
 
 // Default returns an Engine instance with the Logger and Recovery middleware already attached.
+// 打印提示信息：版本号检测 & 告知预填的中间件
+// 初始化一个路由引擎
+// 填入日志打印、恢复中间件
 func Default() *Engine {
 	debugPrintWARNINGDefault()
 	engine := New()
+	// 日志中间件默认输出到命令控制面板 os.Stdout
 	engine.Use(Logger(), Recovery())
 	return engine
 }

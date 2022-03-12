@@ -19,3 +19,5 @@
 {"level":"INFO","ts":"2022-03-12T17:34:43.340+0800","caller":"redis/redis.go:28","msg":"redis connect success, ping is PONG"}
 {"level":"INFO","ts":"2022-03-12T17:34:43.352+0800","caller":"practise-code/main.go:25","msg":"practise services starting at: http://localhost:80"}
 {"level":"INFO","ts":"2022-03-12T17:35:09.002+0800","caller":"middleware/jwt.go:42","msg":"JWT权限校验，当前授权已作废"}
+{"level":"INFO","ts":"2022-03-12T20:28:42.280+0800","caller":"redis/redis.go:28","msg":"redis connect success, ping is PONG"}
+{"level":"INFO","ts":"2022-03-12T20:28:42.307+0800","caller":"practise-code/main.go:25","msg":"practise services starting at: http://localhost:80"}

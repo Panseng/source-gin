@@ -32,8 +32,7 @@ API文档 & API调测：`swaggo/swag`
 
 日志：`go.uber.org/zap`
 
-## Todo
-- [ ] redis 缓存 jwt
+缓存：`go-redis/redis/v8`
 
 ## swagger 尾部参数
 如以下路径的id，需要作为api值传递
