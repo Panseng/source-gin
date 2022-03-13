@@ -564,13 +564,16 @@ func (engine *Engine) RunListener(listener net.Listener) (err error) {
 
 // ServeHTTP conforms to the http.Handler interface.
 func (engine *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	// 从 sync.Pool 获取一个对象
 	c := engine.pool.Get().(*Context)
+	// 配置 context
 	c.writermem.reset(w)
 	c.Request = req
 	c.reset()
 
 	engine.handleHTTPRequest(c)
 
+	// 将对象放回 sync.Pool
 	engine.pool.Put(c)
 }
 
